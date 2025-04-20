@@ -3,6 +3,7 @@ package com.example.INVENTARIO_DROGUERIA.Model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Data
@@ -27,6 +28,9 @@ public class MovimientoInventario {
 
     @Column(nullable = false)
     private Integer cantidad;
+
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal precioCompraVenta;
 
     @Column(nullable = false)
     private LocalDate fecha;
