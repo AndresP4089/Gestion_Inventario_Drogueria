@@ -25,25 +25,31 @@ public class ProductoService {
 
         Page<Producto> productos = productoRepository.findAllOrderByAsc(pageable);
 
-        if(!productos.hasContent()){
+        if(!productos.hasContent()) {
             throw new NoContentData("No hay contenido");
         }
 
         return productos;
     }
 
-    // listar por codigo
+    // burcar por codigo
     public Producto obtenerPorCodigo(String codigo) {
         // validar que exista producto con el codigo
         return productoRepository.findByCodigo(codigo)
                 .orElseThrow(() -> new NotFoundDataException("No existe un producto con el código: " + codigo));
     }
 
-    // listar por nombre
-    public List<Producto> obtenerPorNombre(String nombre) {
+    // paginar por nombre
+    public Page<Producto> obtenerPorNombre(String nombre, Pageable pageable) {
         // validaciones
         nombre = nombre.trim();
-        return productoRepository.findByName(nombre);
+        Page<Producto> productos = productoRepository.findByName(nombre, pageable);
+
+        if(!productos.hasContent()) {
+            throw new NoContentData("No hay contenido");
+        }
+
+        return productos;
     }
 
     // ACTUALIZACIONES

@@ -19,7 +19,7 @@ public class ProductoController {
     private ProductoService productoService;
 
     //CONSULTAS
-    //Paginar
+    //Paginar todo
     @GetMapping("/paginar/{numeroPagina}")
     public ResponseEntity<Page<Producto>> obtenerTodos(@PathVariable int numeroPagina) {
 
@@ -30,17 +30,22 @@ public class ProductoController {
         return ResponseEntity.ok(productoService.obtenerTodos(PageRequest.of(numeroPagina, 10)));
     }
 
-    //Listar por codigo
-    @GetMapping("/listar/codigo/{codigo}")
+    //Buscar por codigo
+    @GetMapping("/buscar/{codigo}")
     public ResponseEntity<Producto> obtenerPorCodigo(@PathVariable String codigo) {
         Producto producto = productoService.obtenerPorCodigo(codigo);
         return ResponseEntity.ok(producto);
     }
 
-    //Listar por nombre
-    @GetMapping("/listar/nombre/{nombre}")
-    public List<Producto> obtenerPorNombre(@PathVariable String nombre) {
-        return productoService.obtenerPorNombre(nombre);
+    //Paginar por nombre
+    @GetMapping("/paginar/{numeroPagina}/nombre/{nombre}")
+    public ResponseEntity<Page<Producto>> obtenerPorNombre(@PathVariable int numeroPagina, @PathVariable String nombre) {
+
+        if(numeroPagina<0){
+            throw new BadRequestException("No ingrese números negativos");
+        }
+
+        return ResponseEntity.ok(productoService.obtenerPorNombre(nombre, PageRequest.of(numeroPagina, 10)));
     }
 
     //ACTUALIZACIONES

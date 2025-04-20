@@ -24,9 +24,11 @@ public interface ProductoRepository extends JpaRepository<Producto, Long> {
     Optional<Producto> findByCodigo(@Param("codigoProducto") String codigoProducto);
 
     @Query(value = "SELECT * FROM producto " +
-            "WHERE estado = 'ACTIVO' AND LOWER(nombre) LIKE LOWER(CONCAT(:letra, '%')) " +
-            "ORDER BY nombre ASC", nativeQuery = true)
-    List<Producto> findByName(@Param("letra") String letra);
+            "WHERE estado = 'ACTIVO' AND LOWER(nombre) LIKE LOWER(CONCAT(:nombre, '%')) " +
+            "ORDER BY nombre ASC",
+            countQuery = "SELECT count(*) FROM producto WHERE estado = 'ACTIVO' AND LOWER(nombre) LIKE LOWER(CONCAT(:nombre, '%')) ",
+            nativeQuery = true)
+    Page<Producto> findByName(@Param("nombre") String nombre, Pageable pageable);
 
 }
 
