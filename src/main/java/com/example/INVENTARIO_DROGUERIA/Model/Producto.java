@@ -13,6 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Getter
 @Table(name = "producto")
 public class Producto {
 
@@ -23,7 +24,7 @@ public class Producto {
     @Column(nullable = false, length = 100)
     private String nombre;
 
-    @Column(unique = true, length = 50)
+    @Column(unique = true, length = 50, nullable = false)
     private String codigo;
 
     @Column(columnDefinition = "TEXT")
