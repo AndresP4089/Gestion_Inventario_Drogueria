@@ -23,7 +23,7 @@ public class ProductoController {
     public ResponseEntity<Page<Producto>> obtenerTodos(@PathVariable int numeroPagina) {
 
         if(numeroPagina<0){
-            throw new BadRequestException("No ingrese números negativos");
+            throw new BadRequestException("No ingrese números negativos.");
         }
 
         return ResponseEntity.ok(productoService.obtenerTodos(PageRequest.of(numeroPagina, 10)));
@@ -40,7 +40,7 @@ public class ProductoController {
     @GetMapping("/paginar/{numeroPagina}/nombre/{nombre}")
     public ResponseEntity<Page<Producto>> obtenerPorNombre(@PathVariable int numeroPagina, @PathVariable String nombre) {
         if(numeroPagina<0){
-            throw new BadRequestException("No ingrese números negativos");
+            throw new BadRequestException("No ingrese números negativos.");
         }
 
         return ResponseEntity.ok(productoService.obtenerPorNombre(nombre, PageRequest.of(numeroPagina, 10)));
@@ -60,8 +60,9 @@ public class ProductoController {
         return ResponseEntity.ok(productoService.editarProducto(producto, idProducto));
     }
 
+    // Inactivar producto(Borrado logico)
     @DeleteMapping("/eliminar/{id}")
-    public void eliminar(@PathVariable Long id) {
-        productoService.eliminar(id);
+    public ResponseEntity<String> elimnar(@PathVariable Long id) {
+        return ResponseEntity.ok("Producto id {" + id + "} ahora está INACTIVO. " + productoService.eliminarProducto(id));
     }
 }

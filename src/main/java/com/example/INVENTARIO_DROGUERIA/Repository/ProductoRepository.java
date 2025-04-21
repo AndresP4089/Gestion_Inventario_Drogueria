@@ -4,9 +4,11 @@ import com.example.INVENTARIO_DROGUERIA.Model.Producto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -45,5 +47,10 @@ public interface ProductoRepository extends JpaRepository<Producto, Long> {
     // Decir si existe un producto con codigo e id
     boolean existsByCodigoAndIdNot(String codigo, Long id);
 
+    // Inactivar un producto
+    @Modifying
+    @Transactional
+    @Query(value = "UPDATE producto SET estado = :estado WHERE id = :idProducto", nativeQuery = true)
+    void actualizarEstadoProducto(@Param("idProducto") Long idProducto, @Param("estado") String estado);
 }
 
