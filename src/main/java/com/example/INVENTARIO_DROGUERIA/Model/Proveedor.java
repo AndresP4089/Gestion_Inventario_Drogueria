@@ -22,7 +22,7 @@ public class Proveedor {
     private String nombre;
 
     @Column(unique = true)
-    private String ruc;
+    private String nit;
 
     private String direccion;
 
