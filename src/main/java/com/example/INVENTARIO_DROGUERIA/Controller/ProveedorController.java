@@ -55,9 +55,9 @@ public class ProveedorController {
     }
 
     // Editar existente
-    @PutMapping("/editar/{id}")
-    public void editar(@PathVariable Long id) {
-        proveedorService.eliminar(id);
+    @PutMapping("/editar/{idProveedor}")
+    public ResponseEntity<Proveedor> editar(@RequestBody Proveedor proveedor, @PathVariable Long idProveedor) {
+        return ResponseEntity.ok(proveedorService.editarProveedor(proveedor, idProveedor));
     }
 
     // Inactivar proveedor(Borrado logico)

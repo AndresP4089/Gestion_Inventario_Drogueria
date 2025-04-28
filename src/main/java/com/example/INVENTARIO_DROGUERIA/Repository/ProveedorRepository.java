@@ -38,6 +38,12 @@ public interface ProveedorRepository extends JpaRepository<Proveedor, Long> {
     // Decir si existe un proveedor por su NIT
     boolean existsByNit(String NIT);
 
+    // Encontrar un proveedor por nombre
+    Optional<Proveedor> findByNombre(String nombre);
+
+    // Decir si existe un proveedor con nit e id
+    boolean existsByNitAndIdNot(String nit, Long id);
+
 
 }
 

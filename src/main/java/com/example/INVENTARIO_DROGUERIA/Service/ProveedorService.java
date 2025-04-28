@@ -10,6 +10,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.util.Optional;
+
 @Service
 public class ProveedorService {
 
@@ -86,6 +89,53 @@ public class ProveedorService {
         proveedor.setEstado(Proveedor.EstadoProveedor.ACTIVO);
 
         return proveedorRepository.save(proveedor);
+    }
+
+    // Editar un proveedor existente
+    public Proveedor editarProveedor(Proveedor proveedorNuevo, Long id) {
+
+        // Validar que exista el proveedor
+        Proveedor proveedorActual = proveedorRepository.findById(id)
+                .orElseThrow(() -> new BadRequestException("El proveedor con id {" + id + "} no existe."));
+
+        // Validar que el proveedor esté activo, no editar proveedores inactivos
+        if (proveedorActual.getEstado() == Proveedor.EstadoProveedor.INACTIVO) {
+            throw new BadRequestException("Este proveedor está inactivo, no se puede editar.");
+        }
+
+        // Validar que no exista otro proveedor con el mismo nombre (y diferente id)
+        Optional<Proveedor> proveedorConMismoNombre = proveedorRepository.findByNombre(proveedorNuevo.getNombre());
+        if (proveedorConMismoNombre.isPresent() && !proveedorConMismoNombre.get().getId().equals(id)) {
+            throw new BadRequestException("Ya existe otro proveedor con ese nombre.");
+        }
+
+        // Validar que no exista otro proveedor con el mismo nit (y diferente id)
+        if (proveedorRepository.existsByNitAndIdNot(proveedorNuevo.getNit(), id)) {
+            throw new BadRequestException("Ya existe otro proveedor con ese NIT.");
+        }
+
+        // Aqui se pueden agregar mas validaciones en los datos direccion, telefono y correo
+
+        // Solo actualiza campos no nulos o no vacíos(Actualizacion parcial)
+        if (proveedorNuevo.getNombre() != null && !proveedorNuevo.getNombre().isBlank()) {
+            proveedorActual.setNombre(proveedorNuevo.getNombre());
+        }
+
+        if (proveedorNuevo.getNit() != null && !proveedorNuevo.getNit().isBlank()) {
+            proveedorActual.setNit(proveedorNuevo.getNit());
+        }
+
+        if (proveedorNuevo.getDireccion() != null && !proveedorNuevo.getDireccion().isBlank()) {
+            proveedorActual.setDireccion(proveedorNuevo.getDireccion());
+        }
+
+        if (proveedorNuevo.getEmail() != null && !proveedorNuevo.getEmail().isBlank()) {
+            proveedorActual.setEmail(proveedorNuevo.getEmail());
+        }
+
+        proveedorActual.setEstado(Proveedor.EstadoProveedor.ACTIVO);
+
+        return proveedorRepository.save(proveedorActual);
     }
 
     public void eliminar(Long id) {
