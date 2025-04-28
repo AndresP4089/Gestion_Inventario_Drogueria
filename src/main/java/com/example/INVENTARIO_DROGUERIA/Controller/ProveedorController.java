@@ -61,8 +61,8 @@ public class ProveedorController {
     }
 
     // Inactivar proveedor(Borrado logico)
-    @DeleteMapping("/eliminar/{id}")
-    public void eliminar(@PathVariable Long id) {
-        proveedorService.eliminar(id);
+    @DeleteMapping("/eliminar/{idProveedor}")
+    public ResponseEntity<String> eliminar(@PathVariable Long idProveedor) {
+        return ResponseEntity.ok("Proveedor id {" + idProveedor + "} ahora está INACTIVO. " +proveedorService.eliminarProveedor(idProveedor));
     }
 }

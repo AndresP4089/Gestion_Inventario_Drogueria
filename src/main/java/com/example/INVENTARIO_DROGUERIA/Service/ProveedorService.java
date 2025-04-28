@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.Optional;
@@ -138,7 +139,24 @@ public class ProveedorService {
         return proveedorRepository.save(proveedorActual);
     }
 
-    public void eliminar(Long id) {
-        proveedorRepository.deleteById(id);
+    // Eliminar (Borrado logico)
+    @Transactional
+    public String eliminarProveedor(Long idProveedor) {
+        // Validar que existe el proveedor
+        Proveedor proveedorActual = proveedorRepository.findById(idProveedor)
+                .orElseThrow(() -> new BadRequestException("El proveedor con id {" + idProveedor + "} no existe."));
+
+        // Validar que el proveedor esté activo, no editar proveedores inactivos
+        if (proveedorActual.getEstado() == Proveedor.EstadoProveedor.INACTIVO) {
+            throw new BadRequestException("Este proveedor ya está inactivo.");
+        }
+
+        // Este método inactiva el proveedor pero no a todos los lotes asociados.
+        // Si en el futuro se agregan otras entidades relacionadas, también se deben inactivar aquí.
+
+        proveedorRepository.actualizarEstadoProveedor(idProveedor, Proveedor.EstadoProveedor.INACTIVO.name());
+
+        return "Eliminación exitosa.";
+
     }
 }
