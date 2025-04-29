@@ -1,8 +1,12 @@
 package com.example.INVENTARIO_DROGUERIA.Service;
 
+import com.example.INVENTARIO_DROGUERIA.Exceptions.NoContentData;
 import com.example.INVENTARIO_DROGUERIA.Model.Lote;
+import com.example.INVENTARIO_DROGUERIA.Model.Proveedor;
 import com.example.INVENTARIO_DROGUERIA.Repository.LoteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,8 +18,17 @@ public class LoteService {
     @Autowired
     private LoteRepository loteRepository;
 
-    public List<Lote> obtenerTodos() {
-        return loteRepository.findAll(); // <- aquí corregido
+    // CONSULTAS
+
+    // Paginar todos en orden alfabetico
+    public Page<Lote> obtenerTodos(Pageable pageable) {
+        Page<Lote> lotes = loteRepository.findAllOrderByAsc(pageable);
+
+        if(!lotes.hasContent()) {
+            throw new NoContentData("No hay contenido.");
+        }
+
+        return lotes;
     }
 
     public Optional<Lote> obtenerPorId(Long id) {

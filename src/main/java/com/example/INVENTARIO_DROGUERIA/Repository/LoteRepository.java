@@ -1,6 +1,8 @@
 package com.example.INVENTARIO_DROGUERIA.Repository;
 
 import com.example.INVENTARIO_DROGUERIA.Model.Lote;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -15,4 +17,10 @@ public interface LoteRepository extends JpaRepository<Lote, Long> {
     @Transactional
     @Query(value = "UPDATE lote SET estado = :estado WHERE producto_id = :idProducto", nativeQuery = true)
     int actualizarEstadoLotePorProducto(@Param("idProducto") Long idProducto, @Param("estado") String estado);
+
+    // Encontrar y paginar todos los lotes activos en orden de fecha ingreso
+    @Query(value = "SELECT * FROM lote WHERE estado = 'ACTIVO' ORDER BY fecha_ingreso ASC",
+            countQuery = "SELECT count(*) FROM lote WHERE estado = 'ACTIVO'",
+            nativeQuery = true)
+    Page<Lote> findAllOrderByAsc(Pageable pageable);
 }
