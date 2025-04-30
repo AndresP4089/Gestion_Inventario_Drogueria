@@ -3,14 +3,12 @@ package com.example.INVENTARIO_DROGUERIA.Service;
 import com.example.INVENTARIO_DROGUERIA.Exceptions.NoContentData;
 import com.example.INVENTARIO_DROGUERIA.Exceptions.NotFoundDataException;
 import com.example.INVENTARIO_DROGUERIA.Model.Lote;
-import com.example.INVENTARIO_DROGUERIA.Model.Proveedor;
 import com.example.INVENTARIO_DROGUERIA.Repository.LoteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -41,6 +39,12 @@ public class LoteService {
         }
 
         return lotes;
+    }
+
+    // Buscar por numero_lote
+    public Lote obtenerPorNumeroLote(String numLote) {
+        return loteRepository.findByNumeroLote(numLote).
+                orElseThrow(() -> new NotFoundDataException("No se encontró un lote con el numero {"+ numLote + "}."));
     }
 
     public Optional<Lote> obtenerPorId(Long id) {

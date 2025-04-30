@@ -43,6 +43,13 @@ public class LoteController {
         return ResponseEntity.ok(loteService.obtenerPorFechaVencimiento(PageRequest.of(numeroPagina, 10)));
     }
 
+    // Buscar por NIT
+    @GetMapping("/buscar/{numLote}")
+    public ResponseEntity<Lote> obtenerPorNumeroLote(@PathVariable String numLote) {
+        Lote lote = loteService.obtenerPorNumeroLote(numLote);
+        return ResponseEntity.ok(lote);
+    }
+
     @GetMapping("/listar/{id}")
     public Optional<Lote> obtenerPorId(@PathVariable Long id) {
         return loteService.obtenerPorId(id);

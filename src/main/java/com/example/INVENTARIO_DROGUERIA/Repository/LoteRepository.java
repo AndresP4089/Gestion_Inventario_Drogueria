@@ -10,6 +10,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Repository
 public interface LoteRepository extends JpaRepository<Lote, Long> {
 
@@ -29,4 +31,10 @@ public interface LoteRepository extends JpaRepository<Lote, Long> {
             countQuery = "SELECT count(*) FROM lote WHERE estado = 'ACTIVO'",
             nativeQuery = true)
     Page<Lote> findAllOrderByFechaVencimientoDesc(Pageable pageable);
+
+    // Encontrar los lotes activos por su numero_lote
+    @Query(value = "SELECT * FROM lote\n" +
+            "WHERE estado = 'ACTIVO'\n" +
+            "AND numero_lote = :numLote;", nativeQuery = true)
+    Optional<Lote> findByNumeroLote(@Param("numLote") String numLote);
 }
