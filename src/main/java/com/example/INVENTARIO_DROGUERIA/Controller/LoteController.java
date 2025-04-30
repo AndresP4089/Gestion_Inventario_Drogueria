@@ -21,15 +21,26 @@ public class LoteController {
 
     // CONSULTAS
 
-    // Paginar todo
-    @GetMapping("/paginar/{numeroPagina}")
-    public ResponseEntity<Page<Lote>> obtenerTodos(@PathVariable int numeroPagina) {
+    // Paginar todo desc fecha ingreso
+    @GetMapping("/paginar/fecha-ingreso/{numeroPagina}")
+    public ResponseEntity<Page<Lote>> obtenerTodosFechaIngreso(@PathVariable int numeroPagina) {
 
         if (numeroPagina<0) {
             throw new BadRequestException("No ingrese números negativos.");
         }
 
-        return ResponseEntity.ok(loteService.obtenerTodos(PageRequest.of(numeroPagina, 10)));
+        return ResponseEntity.ok(loteService.obtenerPorFechaIngreso(PageRequest.of(numeroPagina, 10)));
+    }
+
+    // Paginar todo asc fecha vencimiento
+    @GetMapping("/paginar/fecha-vencimiento/{numeroPagina}")
+    public ResponseEntity<Page<Lote>> obtenerTodosFechaVencimiento(@PathVariable int numeroPagina) {
+
+        if (numeroPagina<0) {
+            throw new BadRequestException("No ingrese números negativos.");
+        }
+
+        return ResponseEntity.ok(loteService.obtenerPorFechaVencimiento(PageRequest.of(numeroPagina, 10)));
     }
 
     @GetMapping("/listar/{id}")

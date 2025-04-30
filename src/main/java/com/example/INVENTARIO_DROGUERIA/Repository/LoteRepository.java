@@ -18,9 +18,15 @@ public interface LoteRepository extends JpaRepository<Lote, Long> {
     @Query(value = "UPDATE lote SET estado = :estado WHERE producto_id = :idProducto", nativeQuery = true)
     int actualizarEstadoLotePorProducto(@Param("idProducto") Long idProducto, @Param("estado") String estado);
 
-    // Encontrar y paginar todos los lotes activos en orden de fecha ingreso
-    @Query(value = "SELECT * FROM lote WHERE estado = 'ACTIVO' ORDER BY fecha_ingreso ASC",
+    // Encontrar y paginar todos los lotes activos en orden desc por fecha_ingreso
+    @Query(value = "SELECT * FROM lote WHERE estado = 'ACTIVO' ORDER BY fecha_ingreso DESC",
             countQuery = "SELECT count(*) FROM lote WHERE estado = 'ACTIVO'",
             nativeQuery = true)
-    Page<Lote> findAllOrderByAsc(Pageable pageable);
+    Page<Lote> findAllOrderByFechaIngresoAsc(Pageable pageable);
+
+    // Encontrar y paginar todos los lotes activos en orden de asc por fecha_vencimiento
+    @Query(value = "SELECT * FROM lote WHERE estado = 'ACTIVO' ORDER BY fecha_vencimiento ASC",
+            countQuery = "SELECT count(*) FROM lote WHERE estado = 'ACTIVO'",
+            nativeQuery = true)
+    Page<Lote> findAllOrderByFechaVencimientoDesc(Pageable pageable);
 }

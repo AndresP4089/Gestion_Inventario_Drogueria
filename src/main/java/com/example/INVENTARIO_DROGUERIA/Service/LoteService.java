@@ -1,6 +1,7 @@
 package com.example.INVENTARIO_DROGUERIA.Service;
 
 import com.example.INVENTARIO_DROGUERIA.Exceptions.NoContentData;
+import com.example.INVENTARIO_DROGUERIA.Exceptions.NotFoundDataException;
 import com.example.INVENTARIO_DROGUERIA.Model.Lote;
 import com.example.INVENTARIO_DROGUERIA.Model.Proveedor;
 import com.example.INVENTARIO_DROGUERIA.Repository.LoteRepository;
@@ -20,9 +21,20 @@ public class LoteService {
 
     // CONSULTAS
 
-    // Paginar todos en orden alfabetico
-    public Page<Lote> obtenerTodos(Pageable pageable) {
-        Page<Lote> lotes = loteRepository.findAllOrderByAsc(pageable);
+    // Paginar todos en orden en desc por fecha ingreso
+    public Page<Lote> obtenerPorFechaIngreso(Pageable pageable) {
+        Page<Lote> lotes = loteRepository.findAllOrderByFechaIngresoAsc(pageable);
+
+        if(!lotes.hasContent()) {
+            throw new NoContentData("No hay contenido.");
+        }
+
+        return lotes;
+    }
+
+    // Paginar todos en orden asc por fecha vencimiento
+    public Page<Lote> obtenerPorFechaVencimiento(Pageable pageable) {
+        Page<Lote> lotes = loteRepository.findAllOrderByFechaVencimientoDesc(pageable);
 
         if(!lotes.hasContent()) {
             throw new NoContentData("No hay contenido.");
