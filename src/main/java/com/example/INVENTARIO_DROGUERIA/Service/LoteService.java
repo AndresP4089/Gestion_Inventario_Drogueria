@@ -132,12 +132,32 @@ public class LoteService {
 
         return loteRepository.save(lote);
     }
-    public Optional<Lote> obtenerPorId(Long id) {
-        return loteRepository.findById(id); // <- aquí también
-    }
 
-    public Lote guardar(Lote lote) {
-        return loteRepository.save(lote); // <- y aquí
+    // Editar
+    public Lote editarExistente(DTOLoteRequest request, Long idLote) {
+        // Validar que existe
+        Lote lote = loteRepository.findById(idLote)
+                .orElseThrow(() -> new BadRequestException("El lote que intenta editar no existe."));
+
+        // Validar que el lote está activo
+        if (lote.getEstado() == Lote.EstadoLote.INACTIVO) {
+            throw new BadRequestException("Este lote está inactivo, no se puede editar.");
+        }
+
+        // Validar que tenga la fecha de vencimiento
+        if (request.getFechaVencimiento() == null) {
+            throw new BadRequestException("Debe proporcionar una nueva fecha de vencimiento.");
+        }
+
+        // Validar que la fecha de vencimiento no sea igual o anterior a la fecha actual
+        if (!request.getFechaVencimiento().isAfter(lote.getFechaIngreso())) {
+            throw new BadRequestException("La fecha de vencimiento del lote debe ser posterior a la fecha de ingreso.");
+        }
+
+        lote.setId(idLote);
+        lote.setFechaVencimiento(request.getFechaVencimiento());
+
+        return loteRepository.save(lote);
     }
 
     public void eliminar(Long id) {

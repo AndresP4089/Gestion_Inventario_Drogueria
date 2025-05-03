@@ -10,8 +10,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
-
 @RestController
 @RequestMapping("/api/lotes")
 public class LoteController {
@@ -58,9 +56,10 @@ public class LoteController {
         return ResponseEntity.ok(loteService.crearNuevoLote(request));
     }
 
-    @GetMapping("/listar/{id}")
-    public Optional<Lote> obtenerPorId(@PathVariable Long id) {
-        return loteService.obtenerPorId(id);
+    // Editar
+    @PutMapping("/editar/{idLote}")
+    public ResponseEntity<Lote> editar(@RequestBody DTOLoteRequest request, @PathVariable Long idLote){
+        return ResponseEntity.ok(loteService.editarExistente(request, idLote));
     }
 
     @DeleteMapping("/eliminar/{id}")
