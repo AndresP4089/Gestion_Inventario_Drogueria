@@ -160,8 +160,20 @@ public class LoteService {
         return loteRepository.save(lote);
     }
 
-    public void eliminar(Long id) {
-        loteRepository.deleteById(id); // <- y finalmente aquí
+    public String eliminarLote(Long idLote) {
+        // Validar que exista el lote
+        Lote lote = loteRepository.findById(idLote)
+                .orElseThrow(() -> new BadRequestException("El lote con id {" + idLote + "} no existe."));
+
+        // Validar que el lote esté activo
+        if (lote.getEstado() == Lote.EstadoLote.INACTIVO) {
+            throw new BadRequestException("Este lote ya está inactivo.");
+        }
+
+        // Al eliminar un lote no se debe eliminar el producto ni el proveedor asociado
+
+        loteRepository.actualizarEstadoLote(idLote, Producto.EstadoProducto.INACTIVO.name());
+        return "Lote eliminado.";
     }
 }
 

@@ -40,4 +40,10 @@ public interface LoteRepository extends JpaRepository<Lote, Long> {
 
     // Decir si existe un lote por su codigo
     boolean existsByNumeroLote(String numeroLote);
+
+    // Inactivar un lote
+    @Modifying
+    @Transactional
+    @Query(value = "UPDATE lote SET estado = :estado WHERE id = :idLote", nativeQuery = true)
+    void actualizarEstadoLote(@Param("idLote") Long idLote, @Param("estado") String estado);
 }

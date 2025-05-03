@@ -62,9 +62,10 @@ public class LoteController {
         return ResponseEntity.ok(loteService.editarExistente(request, idLote));
     }
 
-    @DeleteMapping("/eliminar/{id}")
-    public void eliminar(@PathVariable Long id) {
-        loteService.eliminar(id);
+    // Eliminar (borrado logico)
+    @DeleteMapping("/eliminar/{idLote}")
+    public ResponseEntity<String> eliminar(@PathVariable Long idLote) {
+        return ResponseEntity.ok("Lote id {" + idLote + "} ahora está INACTIVO. " + loteService.eliminarLote(idLote));
     }
 }
 
