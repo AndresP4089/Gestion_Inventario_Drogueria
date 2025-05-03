@@ -1,6 +1,7 @@
 package com.example.INVENTARIO_DROGUERIA.Controller;
 
 import com.example.INVENTARIO_DROGUERIA.Exceptions.BadRequestException;
+import com.example.INVENTARIO_DROGUERIA.Model.DTOLoteRequest;
 import com.example.INVENTARIO_DROGUERIA.Model.Lote;
 import com.example.INVENTARIO_DROGUERIA.Service.LoteService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -50,14 +50,17 @@ public class LoteController {
         return ResponseEntity.ok(lote);
     }
 
+    // ACTUALIZACIONES
+
+    // Crear
+    @PostMapping("/crear")
+    public ResponseEntity<Lote> guardar(@RequestBody DTOLoteRequest request){
+        return ResponseEntity.ok(loteService.crearNuevoLote(request));
+    }
+
     @GetMapping("/listar/{id}")
     public Optional<Lote> obtenerPorId(@PathVariable Long id) {
         return loteService.obtenerPorId(id);
-    }
-
-    @PostMapping("/crear")
-    public Lote guardar(@RequestBody Lote lote) {
-        return loteService.guardar(lote);
     }
 
     @DeleteMapping("/eliminar/{id}")

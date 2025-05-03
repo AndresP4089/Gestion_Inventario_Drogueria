@@ -37,4 +37,7 @@ public interface LoteRepository extends JpaRepository<Lote, Long> {
             "WHERE estado = 'ACTIVO'\n" +
             "AND numero_lote = :numLote;", nativeQuery = true)
     Optional<Lote> findByNumeroLote(@Param("numLote") String numLote);
+
+    // Decir si existe un lote por su codigo
+    boolean existsByNumeroLote(String numeroLote);
 }
