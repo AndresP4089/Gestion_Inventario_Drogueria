@@ -131,7 +131,6 @@ public class ProductoService {
             throw new BadRequestException("Ya existe otro producto con ese código.");
         }
 
-
         // Validar que precio unitario sea mayor a cero
         if (productoNuevo.getPrecioUnitario().compareTo(BigDecimal.ZERO) <= 0) {
             throw new BadRequestException("El precio unitario debe ser mayor que cero.");

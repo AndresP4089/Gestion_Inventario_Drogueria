@@ -1,8 +1,13 @@
 package com.example.INVENTARIO_DROGUERIA.Controller;
 
+import com.example.INVENTARIO_DROGUERIA.Exceptions.BadRequestException;
 import com.example.INVENTARIO_DROGUERIA.Model.MovimientoInventario;
 import com.example.INVENTARIO_DROGUERIA.Service.MovimientoInventarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.http.ResponseEntity;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,6 +19,17 @@ public class MovimientoInventarioController {
 
     @Autowired
     private MovimientoInventarioService movimientoService;
+
+    // Listar
+    @GetMapping("/paginar/{numeroPagina}")
+    public ResponseEntity<Page<MovimientoInventario>> listarMovimientosPorFecha(@PathVariable int numeroPagina){
+
+        if (numeroPagina<0) {
+            throw new BadRequestException("No ingrese números negativos.");
+        }
+
+        return ResponseEntity.ok(movimientoService.listarPorFecha(PageRequest.of(numeroPagina, 10)));
+    }
 
     @GetMapping("/listar")
     public List<MovimientoInventario> obtenerTodos() {
