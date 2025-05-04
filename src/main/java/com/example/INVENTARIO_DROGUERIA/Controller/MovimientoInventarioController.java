@@ -52,6 +52,17 @@ public class MovimientoInventarioController {
         return ResponseEntity.ok(movimientoService.listarPorLote(numeroLote, PageRequest.of(numeroPagina, 10)));
     }
 
+    // Listar por producto
+    @GetMapping("/paginar/{numeroPagina}/producto/{codigoProducto}")
+    public ResponseEntity<Page<MovimientoInventario>> listarMovimientosPorProducto(@PathVariable int numeroPagina, @PathVariable String codigoProducto) {
+
+        if (numeroPagina<0) {
+            throw new BadRequestException("No ingrese números negativos");
+        }
+
+        return ResponseEntity.ok(movimientoService.listarPorProducto(codigoProducto, PageRequest.of(numeroPagina, 10)));
+    }
+
     @GetMapping("/listar")
     public List<MovimientoInventario> obtenerTodos() {
         return movimientoService.obtenerTodos();

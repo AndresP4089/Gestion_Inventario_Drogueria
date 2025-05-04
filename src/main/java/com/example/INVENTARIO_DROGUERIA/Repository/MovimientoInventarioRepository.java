@@ -34,4 +34,16 @@ public interface MovimientoInventarioRepository extends JpaRepository<Movimiento
     )
     Page<MovimientoInventario> findAllByLote(@Param("numeroLote") String numeroLote, Pageable pageable);
 
+    @Query(
+            value = "SELECT mi.* FROM movimiento_inventario mi " +
+                    "JOIN producto p ON mi.producto_id = p.id " +
+                    "WHERE p.codigo = :codigoProducto AND p.estado = 'ACTIVO' " +
+                    "ORDER BY mi.fecha",
+            countQuery = "SELECT COUNT(*) FROM movimiento_inventario mi " +
+                    "JOIN producto p ON mi.producto_id = p.id " +
+                    "WHERE p.codigo = :codigoProducto AND p.estado = 'ACTIVO'",
+            nativeQuery = true
+    )
+    Page<MovimientoInventario> findAllByProducto(@Param("codigoProducto") String codigoProducto, Pageable pageable);
+
 }

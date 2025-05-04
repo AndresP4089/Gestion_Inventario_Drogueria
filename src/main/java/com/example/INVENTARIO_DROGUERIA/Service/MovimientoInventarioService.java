@@ -47,13 +47,22 @@ public class MovimientoInventarioService {
         Page<MovimientoInventario> movimientoInventarios = movimientoInventarioRepository.findAllByLote(numeroLote, pageable);
 
         if(!movimientoInventarios.hasContent()){
-            throw new BadRequestException("No hay contenido.");
+            throw new NoContentData("No hay contenido.");
         }
 
         return movimientoInventarios;
     }
 
     // Listar por producto (orden fecha desc)
+    public Page<MovimientoInventario> listarPorProducto(String codigoProducto, Pageable pageable) {
+        Page<MovimientoInventario> movimientoInventarios = movimientoInventarioRepository.findAllByProducto(codigoProducto, pageable);
+
+        if(!movimientoInventarios.hasContent()){
+            throw new NoContentData("No hay contenido");
+        }
+
+        return movimientoInventarios;
+    }
 
     // Buscar por id
 
