@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
-import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,6 +30,7 @@ public class MovimientoInventarioController {
         return ResponseEntity.ok(movimientoService.listarPorFecha(PageRequest.of(numeroPagina, 10)));
     }
 
+    // Listar por tipo
     @GetMapping("/paginar/{numeroPagina}/tipo/{tipo}")
     public ResponseEntity<Page<MovimientoInventario>> listarMovimientosPorTipo(@PathVariable int numeroPagina, @PathVariable MovimientoInventario.TipoMovimiento tipo) {
 
@@ -39,6 +39,17 @@ public class MovimientoInventarioController {
         }
 
         return ResponseEntity.ok(movimientoService.listarPorTipo(tipo, PageRequest.of(numeroPagina,10)));
+    }
+
+    // Listar por lote
+    @GetMapping("/paginar/{numeroPagina}/lote/{numeroLote}")
+    public ResponseEntity<Page<MovimientoInventario>> listarMovimientosPorLote(@PathVariable int numeroPagina, @PathVariable String numeroLote) {
+
+        if (numeroPagina<0) {
+            throw new BadRequestException("No ingrese números negativos");
+        }
+
+        return ResponseEntity.ok(movimientoService.listarPorLote(numeroLote, PageRequest.of(numeroPagina, 10)));
     }
 
     @GetMapping("/listar")

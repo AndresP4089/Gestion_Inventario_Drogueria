@@ -1,5 +1,6 @@
 package com.example.INVENTARIO_DROGUERIA.Service;
 
+import com.example.INVENTARIO_DROGUERIA.Exceptions.BadRequestException;
 import com.example.INVENTARIO_DROGUERIA.Exceptions.NoContentData;
 import com.example.INVENTARIO_DROGUERIA.Model.MovimientoInventario;
 import com.example.INVENTARIO_DROGUERIA.Repository.MovimientoInventarioRepository;
@@ -42,6 +43,15 @@ public class MovimientoInventarioService {
     }
 
     // Listar por lote (orden fecha desc)
+    public Page<MovimientoInventario> listarPorLote(String numeroLote, Pageable pageable) {
+        Page<MovimientoInventario> movimientoInventarios = movimientoInventarioRepository.findAllByLote(numeroLote, pageable);
+
+        if(!movimientoInventarios.hasContent()){
+            throw new BadRequestException("No hay contenido.");
+        }
+
+        return movimientoInventarios;
+    }
 
     // Listar por producto (orden fecha desc)
 

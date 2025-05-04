@@ -21,4 +21,17 @@ public interface MovimientoInventarioRepository extends JpaRepository<Movimiento
             countQuery = "SELECT count(*) FROM movimiento_inventario WHERE tipo = :tipo",
             nativeQuery = true)
     Page<MovimientoInventario> findAllOrderDescByTipo(@Param("tipo") String tipo, Pageable pageable);
+
+    @Query(
+            value = "SELECT mi.* FROM movimiento_inventario mi " +
+                    "JOIN lote l ON mi.lote_id = l.id " +
+                    "WHERE l.numero_lote = :numeroLote AND l.estado = 'ACTIVO' " +
+                    "ORDER BY mi.fecha",
+            countQuery = "SELECT COUNT(*) FROM movimiento_inventario mi " +
+                    "JOIN lote l ON mi.lote_id = l.id " +
+                    "WHERE l.numero_lote = :numeroLote AND l.estado = 'ACTIVO'",
+            nativeQuery = true
+    )
+    Page<MovimientoInventario> findAllByLote(@Param("numeroLote") String numeroLote, Pageable pageable);
+
 }
