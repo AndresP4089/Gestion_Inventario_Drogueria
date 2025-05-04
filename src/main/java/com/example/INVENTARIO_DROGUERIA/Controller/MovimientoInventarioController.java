@@ -20,8 +20,8 @@ public class MovimientoInventarioController {
     @Autowired
     private MovimientoInventarioService movimientoService;
 
-    // Listar
-    @GetMapping("/paginar/{numeroPagina}")
+    // Listar por fecha
+    @GetMapping("/paginar/{numeroPagina}/fecha")
     public ResponseEntity<Page<MovimientoInventario>> listarMovimientosPorFecha(@PathVariable int numeroPagina){
 
         if (numeroPagina<0) {
@@ -29,6 +29,16 @@ public class MovimientoInventarioController {
         }
 
         return ResponseEntity.ok(movimientoService.listarPorFecha(PageRequest.of(numeroPagina, 10)));
+    }
+
+    @GetMapping("/paginar/{numeroPagina}/tipo/{tipo}")
+    public ResponseEntity<Page<MovimientoInventario>> listarMovimientosPorTipo(@PathVariable int numeroPagina, @PathVariable MovimientoInventario.TipoMovimiento tipo) {
+
+        if (numeroPagina<0) {
+            throw new BadRequestException("No ingrese números negativos.");
+        }
+
+        return ResponseEntity.ok(movimientoService.listarPorTipo(tipo, PageRequest.of(numeroPagina,10)));
     }
 
     @GetMapping("/listar")

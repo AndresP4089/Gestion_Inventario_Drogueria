@@ -17,9 +17,11 @@ public class MovimientoInventarioService {
     @Autowired
     private MovimientoInventarioRepository movimientoInventarioRepository;
 
+    // CONSULTAS
+
     // Listar todos por fecha orden desc
     public Page<MovimientoInventario> listarPorFecha(Pageable pageable) {
-        Page<MovimientoInventario> movimientoInventarios = movimientoInventarioRepository.findAllOrderByFechaDesc(pageable);
+        Page<MovimientoInventario> movimientoInventarios = movimientoInventarioRepository.findAllOrderDescByFecha(pageable);
 
         if(!movimientoInventarios.hasContent()) {
             throw new NoContentData("No hay contenido.");
@@ -29,6 +31,15 @@ public class MovimientoInventarioService {
     }
 
     // Listar todos por tipo (orden fecha desc)
+    public Page<MovimientoInventario> listarPorTipo(MovimientoInventario.TipoMovimiento tipo, Pageable pageable) {
+        Page<MovimientoInventario> movimientoInventarios = movimientoInventarioRepository.findAllOrderDescByTipo(tipo.name(), pageable);
+
+        if(!movimientoInventarios.hasContent()) {
+            throw new NoContentData("No hay contenido.");
+        }
+
+        return movimientoInventarios;
+    }
 
     // Listar por lote (orden fecha desc)
 
