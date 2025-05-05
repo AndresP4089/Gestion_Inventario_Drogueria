@@ -9,9 +9,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-
 @Service
 public class MovimientoInventarioService {
 
@@ -65,13 +62,10 @@ public class MovimientoInventarioService {
     }
 
     // Buscar por id
+    public MovimientoInventario obtenerPorId(Long idMovimiento) {
 
-    public List<MovimientoInventario> obtenerTodos() {
-        return movimientoInventarioRepository.findAll();
-    }
-
-    public Optional<MovimientoInventario> obtenerPorId(Long id) {
-        return movimientoInventarioRepository.findById(id);
+        return movimientoInventarioRepository.findById(idMovimiento)
+                .orElseThrow(() -> new BadRequestException("El movimiento con id {"+idMovimiento+"} no existe."));
     }
 
     public MovimientoInventario guardar(MovimientoInventario movimiento) {

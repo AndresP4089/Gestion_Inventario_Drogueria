@@ -9,9 +9,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Optional;
-
 @RestController
 @RequestMapping("/api/movimientos")
 public class MovimientoInventarioController {
@@ -63,14 +60,9 @@ public class MovimientoInventarioController {
         return ResponseEntity.ok(movimientoService.listarPorProducto(codigoProducto, PageRequest.of(numeroPagina, 10)));
     }
 
-    @GetMapping("/listar")
-    public List<MovimientoInventario> obtenerTodos() {
-        return movimientoService.obtenerTodos();
-    }
-
-    @GetMapping("/listar/{id}")
-    public Optional<MovimientoInventario> obtenerPorId(@PathVariable Long id) {
-        return movimientoService.obtenerPorId(id);
+    @GetMapping("/buscar/{idMovimiento}")
+    public ResponseEntity<MovimientoInventario> obtenerPorId(@PathVariable Long idMovimiento) {
+        return ResponseEntity.ok(movimientoService.obtenerPorId(idMovimiento));
     }
 
     @PostMapping("/crear")
