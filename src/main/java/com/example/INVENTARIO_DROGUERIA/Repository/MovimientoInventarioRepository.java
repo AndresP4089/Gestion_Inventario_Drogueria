@@ -46,4 +46,12 @@ public interface MovimientoInventarioRepository extends JpaRepository<Movimiento
     )
     Page<MovimientoInventario> findAllByProducto(@Param("codigoProducto") String codigoProducto, Pageable pageable);
 
+    //
+    @Query("SELECT SUM(CASE WHEN m.tipo = 'ENTRADA' THEN m.cantidad ELSE -m.cantidad END) " +
+            "FROM MovimientoInventario m WHERE m.lote.id = :loteId")
+    Integer calcularStockPorLote(@Param("loteId") Long loteId);
+
+    @Query("SELECT SUM(CASE WHEN m.tipo = 'ENTRADA' THEN m.cantidad ELSE -m.cantidad END) " +
+            "FROM MovimientoInventario m WHERE m.producto.id = :productoId AND m.lote IS NULL")
+    Integer calcularStockPorProducto(@Param("productoId") Long productoId);
 }

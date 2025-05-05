@@ -2,18 +2,30 @@ package com.example.INVENTARIO_DROGUERIA.Service;
 
 import com.example.INVENTARIO_DROGUERIA.Exceptions.BadRequestException;
 import com.example.INVENTARIO_DROGUERIA.Exceptions.NoContentData;
+import com.example.INVENTARIO_DROGUERIA.Model.DTOMovimientoRequest;
+import com.example.INVENTARIO_DROGUERIA.Model.Lote;
 import com.example.INVENTARIO_DROGUERIA.Model.MovimientoInventario;
+import com.example.INVENTARIO_DROGUERIA.Model.Producto;
+import com.example.INVENTARIO_DROGUERIA.Repository.LoteRepository;
 import com.example.INVENTARIO_DROGUERIA.Repository.MovimientoInventarioRepository;
+import com.example.INVENTARIO_DROGUERIA.Repository.ProductoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
 
 @Service
 public class MovimientoInventarioService {
 
     @Autowired
     private MovimientoInventarioRepository movimientoInventarioRepository;
+
+    @Autowired
+    private LoteRepository loteRepository;
+
+    @Autowired
+    private ProductoRepository productoRepository;
 
     // CONSULTAS
 

@@ -64,5 +64,10 @@ public class Producto {
         ACTIVO,
         INACTIVO
     }
+
+    // Hay que añadirle un bool para saber si es manejado por lote
+    @Column(nullable = false)
+    private Boolean controladoPorLote;
+
 }
 

@@ -102,6 +102,11 @@ public class ProductoService {
             throw new BadRequestException("El producto debe tener unidad de medida.");
         }
 
+        // Validar si es controlado por lote
+        if (producto.getControladoPorLote() == null) {
+            throw new BadRequestException("El producto debe especificar si es controlada por lote o no");
+        }
+
         // Establece el estado del producto como 'ACTIVO'
         producto.setEstado(Producto.EstadoProducto.ACTIVO);
 
@@ -176,6 +181,10 @@ public class ProductoService {
 
         if (productoNuevo.getStockMinimo() != null) {
             productoActual.setStockMinimo(productoNuevo.getStockMinimo());
+        }
+
+        if (productoNuevo.getControladoPorLote() != null) {
+            productoActual.setControladoPorLote(productoNuevo.getControladoPorLote());
         }
 
         productoActual.setEstado(Producto.EstadoProducto.ACTIVO);

@@ -16,6 +16,8 @@ public class MovimientoInventarioController {
     @Autowired
     private MovimientoInventarioService movimientoService;
 
+    // CONSULTAS
+
     // Listar por fecha
     @GetMapping("/paginar/{numeroPagina}/fecha")
     public ResponseEntity<Page<MovimientoInventario>> listarMovimientosPorFecha(@PathVariable int numeroPagina){
@@ -65,6 +67,9 @@ public class MovimientoInventarioController {
         return ResponseEntity.ok(movimientoService.obtenerPorId(idMovimiento));
     }
 
+    // ACTUALIZACIONES
+
+    // crear nuevo movimiento
     @PostMapping("/crear")
     public MovimientoInventario guardar(@RequestBody MovimientoInventario movimiento) {
         return movimientoService.guardar(movimiento);
