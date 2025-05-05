@@ -36,12 +36,6 @@ public class Lote {
     @Column(name = "fecha_vencimiento", nullable = false)
     private LocalDate fechaVencimiento;
 
-    @Column(name = "cantidad_inicial", nullable = false)
-    private Integer cantidadInicial;
-
-    @Column(name = "cantidad_actual", nullable = false)
-    private Integer cantidadActual;
-
     @JsonIgnore
     @OneToMany(mappedBy = "lote", fetch = FetchType.LAZY)
     private List<MovimientoInventario> movimientos;

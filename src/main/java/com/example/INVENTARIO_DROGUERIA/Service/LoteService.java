@@ -95,11 +95,6 @@ public class LoteService {
         if (request.getFechaVencimiento() == null || !request.getFechaVencimiento().isAfter(LocalDate.now())) {
             throw new BadRequestException("La fecha de vencimiento del lote debe ser posterior a la fecha actual.");
         }
-
-        // Validación para comprobar la cantidad inicial ingresada
-        if (request.getCantidadInicial() <= 0) {
-            throw new BadRequestException("Debe ingresar una cantidad inicial de productos.");
-        }
         
         // Crear nuevo lote, con los datos de request
         
@@ -119,12 +114,6 @@ public class LoteService {
 
         // Establece la fecha de vencimiento
         lote.setFechaVencimiento(request.getFechaVencimiento());
-
-        // Establece la cantidad inicial
-        lote.setCantidadInicial(request.getCantidadInicial());
-
-        // Establece la cantidad actual con la inicial, son iguales al crear un nuevo lote
-        lote.setCantidadActual(request.getCantidadInicial());
 
         // Establece el estado del lote como 'ACTIVO'
         lote.setEstado(Lote.EstadoLote.ACTIVO);
@@ -170,9 +159,16 @@ public class LoteService {
         }
 
         // Al eliminar un lote no se debe eliminar el producto ni el proveedor asociado
+        // No eliminar lotes que tengan movimientos asociados
+        if (!lote.getMovimientos().isEmpty()) {
+            throw new BadRequestException("Este lote está asociado a uno o varios movimientos de inventario, no se puede borrar.");
+        }
 
-        loteRepository.actualizarEstadoLote(idLote, Producto.EstadoProducto.INACTIVO.name());
-        return "Lote eliminado.";
+        // Cambiar estado a inactivo (borrado lógico)
+        lote.setEstado(Lote.EstadoLote.INACTIVO);
+        loteRepository.save(lote);
+
+        return "Lote eliminado correctamente.";
     }
 }
 

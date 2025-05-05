@@ -50,12 +50,6 @@ public class LoteController {
 
     // ACTUALIZACIONES
 
-    // Crear
-    @PostMapping("/crear")
-    public ResponseEntity<Lote> guardar(@RequestBody DTOLoteRequest request){
-        return ResponseEntity.ok(loteService.crearNuevoLote(request));
-    }
-
     // Editar
     @PutMapping("/editar/{idLote}")
     public ResponseEntity<Lote> editar(@RequestBody DTOLoteRequest request, @PathVariable Long idLote){

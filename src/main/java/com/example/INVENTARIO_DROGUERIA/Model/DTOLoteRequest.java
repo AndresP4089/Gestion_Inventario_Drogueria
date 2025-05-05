@@ -10,7 +10,6 @@ import java.time.LocalDate;
 public class DTOLoteRequest {
     private String numeroLote;
     private LocalDate fechaVencimiento;
-    private Integer cantidadInicial;
     private String codigoProducto;
     private String nitProveedor;
 }
