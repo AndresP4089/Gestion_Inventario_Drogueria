@@ -1,6 +1,7 @@
 package com.example.INVENTARIO_DROGUERIA.Controller;
 
 import com.example.INVENTARIO_DROGUERIA.Exceptions.BadRequestException;
+import com.example.INVENTARIO_DROGUERIA.Model.DTOMovimientoRequest;
 import com.example.INVENTARIO_DROGUERIA.Model.MovimientoInventario;
 import com.example.INVENTARIO_DROGUERIA.Service.MovimientoInventarioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,8 +72,8 @@ public class MovimientoInventarioController {
 
     // crear nuevo movimiento
     @PostMapping("/crear")
-    public MovimientoInventario guardar(@RequestBody MovimientoInventario movimiento) {
-        return movimientoService.guardar(movimiento);
+    public ResponseEntity<MovimientoInventario> guardar(@RequestBody DTOMovimientoRequest movimiento) {
+        return ResponseEntity.ok(movimientoService.guardar(movimiento));
     }
 
     @DeleteMapping("/eliminar/{id}")
