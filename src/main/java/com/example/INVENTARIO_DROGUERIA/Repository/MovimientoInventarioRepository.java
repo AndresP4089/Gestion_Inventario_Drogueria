@@ -8,6 +8,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
+import java.util.List;
+
 @Repository
 public interface MovimientoInventarioRepository extends JpaRepository<MovimientoInventario, Long> {
     // Encontrar y paginar todos los movimiento en orden desc por fecha
@@ -54,4 +57,26 @@ public interface MovimientoInventarioRepository extends JpaRepository<Movimiento
     @Query("SELECT SUM(CASE WHEN m.tipo = 'ENTRADA' THEN m.cantidad ELSE -m.cantidad END) " +
             "FROM MovimientoInventario m WHERE m.producto.id = :productoId AND m.lote IS NULL")
     Integer calcularStockPorProducto(@Param("productoId") Long productoId);
+
+    // Reporte por rango de fechas
+    @Query("SELECT m FROM MovimientoInventario m " +
+            "WHERE (:codigoProducto IS NULL OR m.producto.codigo = :codigoProducto) " +
+            "AND (m.fecha >= :fechaDesde) " +
+            "AND (m.fecha <= :fechaHasta) " +
+            "AND (:tipoMovimiento IS NULL OR m.tipo = :tipoMovimiento)")
+    List<MovimientoInventario> buscarPorFiltros(
+            @Param("codigoProducto") String codigoProducto,
+            @Param("fechaDesde") LocalDate fechaDesde,
+            @Param("fechaHasta") LocalDate fechaHasta,
+            @Param("tipoMovimiento") MovimientoInventario.TipoMovimiento tipoMovimiento);
+
+    // Reporte por fecha exacta
+    @Query("SELECT m FROM MovimientoInventario m " +
+            "WHERE (:codigoProducto IS NULL OR m.producto.codigo = :codigoProducto) " +
+            "AND m.fecha = :fechaExacta "+
+            "AND (:tipoMovimiento IS NULL OR m.tipo = :tipoMovimiento)")
+    List<MovimientoInventario> buscarPorFechaExacta(
+            @Param("codigoProducto") String codigoProducto,
+            @Param("fechaExacta") LocalDate fechaExacta,
+            @Param("tipoMovimiento") MovimientoInventario.TipoMovimiento tipoMovimiento);
 }

@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class MovimientoInventarioService {
@@ -85,6 +87,58 @@ public class MovimientoInventarioService {
                 .orElseThrow(() -> new BadRequestException("El movimiento con id {"+idMovimiento+"} no existe."));
     }
 
+    // Generar reporte
+    public List<MovimientoReporteDTO> generarReporte (MovimientoFiltroDTO filtro) {
+
+        // Si no tiene tipoMovimiento
+        if (filtro.getTipoMovimiento() != null && filtro.getTipoMovimiento().toString().isBlank()) {
+            filtro.setTipoMovimiento(null);
+        }
+
+        // Si tiene codigo
+        if (filtro.getCodigoProducto() != null && !filtro.getCodigoProducto().isBlank()) {
+            // Validar el codigo
+            Producto producto = productoService.obtenerPorCodigo(filtro.getCodigoProducto());
+        }
+
+        List<MovimientoInventario> movimientos;
+
+        // Validar si es fecha exacta o rango de fechas
+        // Si es fecha exacta
+        if (isFechaExacta(filtro)) {
+            // Usar consulta fecha exacta
+            movimientos = movimientoInventarioRepository.buscarPorFechaExacta(
+                    filtro.getCodigoProducto(),
+                    filtro.getFechaExacta(),
+                    filtro.getTipoMovimiento()
+            );
+
+            /* Existe una funcion de mapeo
+
+             - Esta funcion toma la lista de movimientos y los convierte en Stream.
+             - Aplica la funcion mapearADTO para convertir los MovimientosInventario a MovimientoReporteDTO.
+             - Luego, toma todos los MovimientoReporteDTO y los pasa a una lista.
+
+             movimientos.stream().map(this::mapearADTO).collect(Collectors.toList());*/
+
+        } else {
+            // Usar consulta rango de fechas
+
+            movimientos = movimientoInventarioRepository.buscarPorFiltros(
+                    filtro.getCodigoProducto(),
+                    filtro.getFechaDesde(),
+                    filtro.getFechaHasta(),
+                    filtro.getTipoMovimiento()
+            );
+        }
+
+        // Convertirlos a MovimientoReporteDTO y retornarlos
+        return mapearADTOListado(movimientos);
+    }
+
+    // ACTUALIZACIONES
+
+    //  Crear
     public MovimientoInventario guardar(DTOMovimientoRequest request) {
         MovimientoInventario movimientoInventario = new MovimientoInventario();
 
@@ -211,8 +265,78 @@ public class MovimientoInventarioService {
         return movimientoInventarioRepository.save(movimientoInventario);
     }
 
-    public void eliminar(Long id) {
-        movimientoInventarioRepository.deleteById(id);
+    // Funciones privadas
+
+    // Convertir el movimientoInventario en el DTORespuesta
+    private MovimientoReporteDTO mapearADTO(MovimientoInventario movimiento) {
+        MovimientoReporteDTO dto = new MovimientoReporteDTO();
+
+        dto.setId(movimiento.getId());
+        dto.setTipo(movimiento.getTipo().name());
+        dto.setCantidad(movimiento.getCantidad());
+        dto.setPrecioCompraVenta(movimiento.getPrecioCompraVenta());
+        dto.setFecha(movimiento.getFecha());
+        dto.setMotivo(movimiento.getMotivo());
+        dto.setObservaciones(movimiento.getObservaciones());
+
+        Producto producto = movimiento.getProducto();
+        dto.setCodigoProducto(producto.getCodigo());
+        dto.setNombreProducto(producto.getNombre());
+
+        if (movimiento.getLote() != null) {
+            dto.setNumeroLote(movimiento.getLote().getNumeroLote());
+            dto.setFechaVencimientoLote(movimiento.getLote().getFechaVencimiento());
+
+            Proveedor proveedor = movimiento.getLote().getProveedor();
+            dto.setNombreProveedor(proveedor.getNombre());
+        }
+
+        return dto;
     }
+
+    // Converitr una lista de movimientos inventario a un listado de DTORespuesta
+    private List<MovimientoReporteDTO> mapearADTOListado(List<MovimientoInventario> movimientos) {
+        List<MovimientoReporteDTO> listaDTO = new ArrayList<>();
+
+        for (MovimientoInventario movimiento: movimientos) {
+            MovimientoReporteDTO dto = mapearADTO(movimiento);
+            listaDTO.add(dto);
+        }
+
+        return listaDTO;
+    }
+
+    // Validar filtro fechas
+    private boolean isFechaExacta(MovimientoFiltroDTO filtro) {
+        // Definir si es por rango de fechas o por fecha exacta
+        // Si tiene fecha exacta
+        if (filtro.getFechaExacta() != null) {
+            // Validar que no tenga fecha desde y hasta
+            if(filtro.getFechaDesde() != null || filtro.getFechaHasta() != null) {
+                throw new BadRequestException("Si proporciona fecha exacta, no puede proporcionar el rango de fechasDesde o fechaHasta.");
+            }
+
+            return true;
+
+        } else if (filtro.getFechaDesde() != null || filtro.getFechaHasta() != null) {
+            // Se valida que al menos una fecha no sea nula
+
+            if (filtro.getFechaDesde() == null || filtro.getFechaHasta() == null) {
+                // Se valida que la otra fecha no sea nula
+                throw new BadRequestException("Se debe proporcionar tanto fechaDesde como fechaHasta.");
+            }
+
+            // Validar que la fechaDesde sea anterior a la fechaHasta
+            if (filtro.getFechaDesde().isAfter(filtro.getFechaHasta())) {
+                throw new BadRequestException("La fechaDesde no puede ser igual o estar despues de la fechaHasta");
+            }
+
+            return false;
+
+        } else {
+            throw new BadRequestException("Debe proporcionar la fecha exacta o un rango de fechas");
+        }
+    }
+
 }
 

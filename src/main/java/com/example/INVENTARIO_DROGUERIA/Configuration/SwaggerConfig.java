@@ -11,9 +11,9 @@ public class SwaggerConfig {
     @Bean
     public OpenAPI customOpenAPI(){
         return new OpenAPI().info(new Info()
-                .title("API Papeleria")
+                .title("API DROGUERIA")
                 .version("1.0")
-                .description("Proyecto para gestionar los procesos de una papeleria")
+                .description("Proyecto para gestionar el inventario de una Drogueria")
                 .contact(new Contact()
                         .name("Soporte API")
                         .email("juego4089@gmail.com")));
