@@ -1,10 +1,11 @@
 package com.example.INVENTARIO_DROGUERIA.Controller;
 
+import com.example.INVENTARIO_DROGUERIA.DTO.MovimientoInventario.ResumenMovimientoInventarioDTO;
 import com.example.INVENTARIO_DROGUERIA.Exceptions.BadRequestException;
-import com.example.INVENTARIO_DROGUERIA.Model.DTOMovimientoRequest;
-import com.example.INVENTARIO_DROGUERIA.Model.MovimientoFiltroDTO;
+import com.example.INVENTARIO_DROGUERIA.DTO.MovimientoInventario.DTOMovimientoRequest;
+import com.example.INVENTARIO_DROGUERIA.DTO.MovimientoInventario.MovimientoFiltroDTO;
 import com.example.INVENTARIO_DROGUERIA.Model.MovimientoInventario;
-import com.example.INVENTARIO_DROGUERIA.Model.MovimientoReporteDTO;
+import com.example.INVENTARIO_DROGUERIA.DTO.MovimientoInventario.MovimientoReporteDTO;
 import com.example.INVENTARIO_DROGUERIA.Service.MovimientoInventarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -77,6 +78,12 @@ public class MovimientoInventarioController {
     @PostMapping("/reporte")
     public ResponseEntity<List<MovimientoReporteDTO>> generarReporte (@RequestBody MovimientoFiltroDTO filtro) {
         return ResponseEntity.ok(movimientoService.generarReporte(filtro));
+    }
+
+    // Resumen del reporte
+    @PostMapping("/resumen")
+    public ResponseEntity<ResumenMovimientoInventarioDTO> generarResumen (@RequestBody MovimientoFiltroDTO filtro) {
+        return ResponseEntity.ok(movimientoService.generarResumenReporte(filtro));
     }
 
     // ACTUALIZACIONES

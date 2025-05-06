@@ -1,5 +1,6 @@
-package com.example.INVENTARIO_DROGUERIA.Model;
+package com.example.INVENTARIO_DROGUERIA.DTO.MovimientoInventario;
 
+import com.example.INVENTARIO_DROGUERIA.Model.MovimientoInventario;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,7 +13,7 @@ public class MovimientoReporteDTO {
 
     // Datos de movimiento
     private Long id;
-    private String tipo; // ENTRADA o SALIDA
+    private MovimientoInventario.TipoMovimiento tipo; // ENTRADA o SALIDA
     private Integer cantidad;
     private BigDecimal precioCompraVenta;
     private LocalDate fecha;

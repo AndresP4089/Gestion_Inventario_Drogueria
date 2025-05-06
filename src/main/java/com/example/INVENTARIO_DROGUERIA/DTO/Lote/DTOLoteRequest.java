@@ -1,4 +1,4 @@
-package com.example.INVENTARIO_DROGUERIA.Model;
+package com.example.INVENTARIO_DROGUERIA.DTO.Lote;
 
 import lombok.Getter;
 import lombok.Setter;

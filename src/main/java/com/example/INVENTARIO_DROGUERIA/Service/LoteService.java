@@ -3,7 +3,7 @@ package com.example.INVENTARIO_DROGUERIA.Service;
 import com.example.INVENTARIO_DROGUERIA.Exceptions.BadRequestException;
 import com.example.INVENTARIO_DROGUERIA.Exceptions.NoContentData;
 import com.example.INVENTARIO_DROGUERIA.Exceptions.NotFoundDataException;
-import com.example.INVENTARIO_DROGUERIA.Model.DTOLoteRequest;
+import com.example.INVENTARIO_DROGUERIA.DTO.Lote.DTOLoteRequest;
 import com.example.INVENTARIO_DROGUERIA.Model.Lote;
 import com.example.INVENTARIO_DROGUERIA.Model.Producto;
 import com.example.INVENTARIO_DROGUERIA.Model.Proveedor;

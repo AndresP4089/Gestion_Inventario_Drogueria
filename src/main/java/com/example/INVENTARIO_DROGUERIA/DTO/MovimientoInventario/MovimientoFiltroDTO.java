@@ -1,5 +1,6 @@
-package com.example.INVENTARIO_DROGUERIA.Model;
+package com.example.INVENTARIO_DROGUERIA.DTO.MovimientoInventario;
 
+import com.example.INVENTARIO_DROGUERIA.Model.MovimientoInventario;
 import lombok.Getter;
 import lombok.Setter;
 

@@ -1,7 +1,7 @@
 package com.example.INVENTARIO_DROGUERIA.Controller;
 
 import com.example.INVENTARIO_DROGUERIA.Exceptions.BadRequestException;
-import com.example.INVENTARIO_DROGUERIA.Model.DTOLoteRequest;
+import com.example.INVENTARIO_DROGUERIA.DTO.Lote.DTOLoteRequest;
 import com.example.INVENTARIO_DROGUERIA.Model.Lote;
 import com.example.INVENTARIO_DROGUERIA.Service.LoteService;
 import org.springframework.beans.factory.annotation.Autowired;

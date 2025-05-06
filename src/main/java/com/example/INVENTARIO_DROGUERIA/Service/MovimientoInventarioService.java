@@ -1,5 +1,7 @@
 package com.example.INVENTARIO_DROGUERIA.Service;
 
+import com.example.INVENTARIO_DROGUERIA.DTO.Lote.DTOLoteRequest;
+import com.example.INVENTARIO_DROGUERIA.DTO.MovimientoInventario.*;
 import com.example.INVENTARIO_DROGUERIA.Exceptions.BadRequestException;
 import com.example.INVENTARIO_DROGUERIA.Exceptions.NoContentData;
 import com.example.INVENTARIO_DROGUERIA.Model.*;
@@ -136,6 +138,20 @@ public class MovimientoInventarioService {
         return mapearADTOListado(movimientos);
     }
 
+    // Generar resumen del reporte
+    public ResumenMovimientoInventarioDTO generarResumenReporte (MovimientoFiltroDTO filtro) {
+
+        List<MovimientoReporteDTO> movimientos = generarReporte(filtro);
+
+        ResumenMovimientoInventarioDTO resumen = new ResumenMovimientoInventarioDTO();
+
+        resumen.setMovimientos(movimientos);
+        resumen.setTotalesMovimientos(TotalesMovimientoDTO.calcularTotalesMovimientos(movimientos));
+        resumen.setTotalesValores(TotalesValoresDTO.calcularTotalesValores(movimientos));
+
+        return resumen;
+    }
+
     // ACTUALIZACIONES
 
     //  Crear
@@ -265,14 +281,14 @@ public class MovimientoInventarioService {
         return movimientoInventarioRepository.save(movimientoInventario);
     }
 
-    // Funciones privadas
+    // FUNCIONES PRIVADAS
 
     // Convertir el movimientoInventario en el DTORespuesta
     private MovimientoReporteDTO mapearADTO(MovimientoInventario movimiento) {
         MovimientoReporteDTO dto = new MovimientoReporteDTO();
 
         dto.setId(movimiento.getId());
-        dto.setTipo(movimiento.getTipo().name());
+        dto.setTipo(movimiento.getTipo());
         dto.setCantidad(movimiento.getCantidad());
         dto.setPrecioCompraVenta(movimiento.getPrecioCompraVenta());
         dto.setFecha(movimiento.getFecha());
