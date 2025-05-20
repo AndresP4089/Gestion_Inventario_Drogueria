@@ -10,15 +10,15 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 public class DTOMovimientoRequest {
-    private String codigoProducto; // ya
-    private Integer cantidad; // ya
-    private String motivo; // ya
-    private String observaciones; // ya
-    private MovimientoInventario.TipoMovimiento tipo; // ya
+    private String codigoProducto;
+    private Integer cantidad;
+    private String motivo;
+    private String observaciones;
+    private MovimientoInventario.TipoMovimiento tipo;
     // Sugerir el precio en el front, ya que puede venderse o comprarse por otro precio (front)
-    private BigDecimal precioCompraVenta; // ya
+    private BigDecimal precioCompraVenta;
     // Se requiere en caso de entrada, para productos controlados por lote
-    private DTOLoteRequest lote; // ya establecido
+    private DTOLoteRequest lote;
     // Se requiere en caso de salida, para productos controlados por lote
     private String numeroLote;
 }
